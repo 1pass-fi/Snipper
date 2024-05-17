@@ -3,3 +3,4 @@ built/
 package-lock.json
 .env
 pumpVolumeMakerExample.csv
+wallet-info.json
