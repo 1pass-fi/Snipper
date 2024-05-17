@@ -25,7 +25,7 @@ const buyTransaction = async (walletSecretKey: string, mintAddress: string) => {
   const associatedAddress = await createAssociatedTokenAccount(connection, owner, mint);
   console.log(`Associated Address: ${associatedAddress}`);
 
-  const instruction = await program.methods.buy(new BN(1500000), new BN(0)).accounts({
+  const instruction = await program.methods.buy(new BN(1050000), new BN(1050000)).accounts({
     global: new PublicKey("4wTV1YmiEkRvAtNtsSGPtUrqRYQMe5SKy2uB4Jjaxnjf"),
     feeRecipient: new PublicKey("CebN5WGQ4jvEPvsVU4EoHEpgzq1VV7AbicfhtW4xC9iM"),
     mint: mint,
@@ -79,7 +79,7 @@ const sellTransaction = async (walletSecretKey: string, mintAddress: string) => 
   const associatedAddress = await createAssociatedTokenAccount(connection, owner, mint);
   console.log(`Associated Address: ${associatedAddress}`);
 
-  const instruction = await program.methods.sell(new BN(1500000), new BN(0)).accounts({
+  const instruction = await program.methods.sell(new BN(1050000), new BN(0)).accounts({
     global: new PublicKey("4wTV1YmiEkRvAtNtsSGPtUrqRYQMe5SKy2uB4Jjaxnjf"),
     feeRecipient: new PublicKey("CebN5WGQ4jvEPvsVU4EoHEpgzq1VV7AbicfhtW4xC9iM"),
     mint: mint,

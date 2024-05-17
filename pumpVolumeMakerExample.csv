@@ -1,0 +1,4 @@
+PRIVATE_KEY,priorityFeeLamports,slippage,jitoTip,buyAmountSOL,buyDelayMs,sellPercent1,sellDelay1,sellPercent2,sellDelay2,sellPercent3,sellDelay3,sellPercent4,sellDelay4,sellPercent5,sellDelay5
+3ZCoZZi3E8YwzgGgG5WWAP2VAksBoFaWQ7DcXN8LHMg,0,100,0.0001,0.00001,385,40,970,84,10246,15,15190,12,24039,100,31139
+o4DKZvcxaakyerwzkkezVFCUfbuBtghcx121sa6P,0,100,0.0001,0.00002,1346,55,5106,94,9509,0,16197,0,18668,0,27692
+3Mu4VRC3UizxbvasdEm2zda122SmQzcxvUHb5VPTw,0,100,0.0001,0.00003,2997,81,12611,3,14360,100,18716,0,28124,0,37980
