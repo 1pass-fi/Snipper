@@ -1,0 +1,169 @@
+{
+  "4JN5JQrvEAUPAkv9hajw4xc8Mxx1shWqbzavCbDWLeHo7QgZfCR59ro5c1kKKypivm7raD4UjMNp4bFMcKpjJ1oh": [
+    {
+      "mint": "3FMEzG1sk4Mx6TGtTQ8M62znCZJZSB8PiC7J1FMYkbK7",
+      "owner": "8cjNrAn6ktJRF7mdCEUZD1t2fdRbwuZdhfRV97whw5GP",
+      "name": "unkown name",
+      "symbol": "",
+      "uri": "",
+      "amount": "100",
+      "decimals": 0,
+      "uiAmount": 100,
+      "uiAmountString": "100"
+    },
+    {
+      "mint": "63dMaTDjgeGr56Ey9JJQDAAhjDzZ7wmQ9rkEkj9jicQm",
+      "owner": "8cjNrAn6ktJRF7mdCEUZD1t2fdRbwuZdhfRV97whw5GP",
+      "name": "unkown name",
+      "symbol": "",
+      "uri": "",
+      "amount": "98",
+      "decimals": 0,
+      "uiAmount": 98,
+      "uiAmountString": "98"
+    },
+    {
+      "mint": "FBcW8q1C7hNLJh9kJHFyQEtH8qnBSdoiFTS72ECgGT7",
+      "owner": "8cjNrAn6ktJRF7mdCEUZD1t2fdRbwuZdhfRV97whw5GP",
+      "name": "Johannesburg Stock Exchange ",
+      "symbol": "$JSE",
+      "uri": "https://cf-ipfs.com/ipfs/QmaC6YtyBreRQan2icuBY3XJyun8WueizHRGxG8L64Lait",
+      "amount": "31021432954",
+      "decimals": 6,
+      "uiAmount": 31021.432954,
+      "uiAmountString": "31021.432954"
+    },
+    {
+      "mint": "Haog5nDHf68p4rUFsqLxqPxUhRjUNjsG4fntRFZ22UoZ",
+      "owner": "8cjNrAn6ktJRF7mdCEUZD1t2fdRbwuZdhfRV97whw5GP",
+      "name": "Cat Meowwalker",
+      "symbol": "$MEOW",
+      "uri": "https://cf-ipfs.com/ipfs/QmaYHzmb2gng9FhbGk13kGHhnPo3ZVNAxKQtGhRkgwSGB5",
+      "amount": "158050",
+      "decimals": 6,
+      "uiAmount": 0.15805,
+      "uiAmountString": "0.15805"
+    },
+    {
+      "mint": "CRnjNc6GdFYcTKwBhYeX86h7R3jwKkcryFw4NhQZCuDZ",
+      "owner": "8cjNrAn6ktJRF7mdCEUZD1t2fdRbwuZdhfRV97whw5GP",
+      "name": "Maru",
+      "symbol": "Maru",
+      "uri": "https://cf-ipfs.com/ipfs/QmbcQfuNy5wttS9rBhjxDqhTxs1neEoosc14EVjYxphR5H",
+      "amount": "565710",
+      "decimals": 6,
+      "uiAmount": 0.56571,
+      "uiAmountString": "0.56571"
+    },
+    {
+      "mint": "sHAr8ExxbPAtDdkg6Fu1zKZbPtxMx9ARBBQuaXPM3Nr",
+      "owner": "8cjNrAn6ktJRF7mdCEUZD1t2fdRbwuZdhfRV97whw5GP",
+      "name": "WOOMAN",
+      "symbol": "GORL ",
+      "uri": "https://cf-ipfs.com/ipfs/Qmch8H7vh6TD2iejjx24MWU4K1wsr4FoFGVUFzjFNbRHyX",
+      "amount": "0",
+      "decimals": 6,
+      "uiAmount": 0,
+      "uiAmountString": "0"
+    },
+    {
+      "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "owner": "8cjNrAn6ktJRF7mdCEUZD1t2fdRbwuZdhfRV97whw5GP",
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "uri": "",
+      "amount": "0",
+      "decimals": 6,
+      "uiAmount": 0,
+      "uiAmountString": "0"
+    },
+    {
+      "mint": "9LFUtDdTqtnT1cp4FAkeNeGMrkmfrCvWiqpJHUtkHPrG",
+      "owner": "8cjNrAn6ktJRF7mdCEUZD1t2fdRbwuZdhfRV97whw5GP",
+      "name": "SquidGME",
+      "symbol": "SGME",
+      "uri": "https://cf-ipfs.com/ipfs/QmZJSmJinwck4mfH6VTdmqkDrJpDKvXMxu6peyGaXkbYKZ",
+      "amount": "600000",
+      "decimals": 6,
+      "uiAmount": 0.6,
+      "uiAmountString": "0.6"
+    },
+    {
+      "mint": "6K8KNunZWAx72emczzmsQEcRyM5KapZo9TzkPuzZ9AvJ",
+      "owner": "8cjNrAn6ktJRF7mdCEUZD1t2fdRbwuZdhfRV97whw5GP",
+      "name": "Solordi",
+      "symbol": "SOLORDI",
+      "uri": "https://cf-ipfs.com/ipfs/QmZoAraLbSeFC45GGo1gpMHXVVqxJH7kExxPztPaVdZZGL",
+      "amount": "883865",
+      "decimals": 6,
+      "uiAmount": 0.883865,
+      "uiAmountString": "0.883865"
+    },
+    {
+      "mint": "5EhQxshejxXV43eoNdCRkdervUcNexq3kYSGFvfPrbSQ",
+      "owner": "8cjNrAn6ktJRF7mdCEUZD1t2fdRbwuZdhfRV97whw5GP",
+      "name": "TIGON",
+      "symbol": "TIGON",
+      "uri": "https://cf-ipfs.com/ipfs/Qmc6j6QBxa4JkfGoDBKMFJTPCjgrCtBBKKJDYS8Q9skEaX",
+      "amount": "0",
+      "decimals": 6,
+      "uiAmount": 0,
+      "uiAmountString": "0"
+    },
+    {
+      "mint": "4zouB1hnSoziEtpP7Fta5P1AwYydLsqXsdB7mLjqJf67",
+      "owner": "8cjNrAn6ktJRF7mdCEUZD1t2fdRbwuZdhfRV97whw5GP",
+      "name": "Boobies",
+      "symbol": "BOOBIES",
+      "uri": "https://cf-ipfs.com/ipfs/QmaRML5ZMMsT5ovZBsUTwEfcy6Qh2wtAV4drpqrbdtpBEF",
+      "amount": "56171",
+      "decimals": 6,
+      "uiAmount": 0.056171,
+      "uiAmountString": "0.056171"
+    },
+    {
+      "mint": "45yUEq6GuQAWBvak7PgEvjitSK6ahD3T9BLomxuX2b3G",
+      "owner": "8cjNrAn6ktJRF7mdCEUZD1t2fdRbwuZdhfRV97whw5GP",
+      "name": "The Cat Wif Tag",
+      "symbol": "Oswald",
+      "uri": "https://cf-ipfs.com/ipfs/QmTZUqLjDHvKQuhityc7e28Np8BXtmPGC9msVBdFEyDLFg",
+      "amount": "893255",
+      "decimals": 6,
+      "uiAmount": 0.893255,
+      "uiAmountString": "0.893255"
+    },
+    {
+      "mint": "B2tLGiG9Ty8Ej4koBxdvFsLofvTXJVo1yxFSq2gLKaE7",
+      "owner": "8cjNrAn6ktJRF7mdCEUZD1t2fdRbwuZdhfRV97whw5GP",
+      "name": "unkown name",
+      "symbol": "",
+      "uri": "",
+      "amount": "98",
+      "decimals": 0,
+      "uiAmount": 98,
+      "uiAmountString": "98"
+    },
+    {
+      "mint": "7Hn19epvVN9cgioN6JBDPWKnQCy9a9LE4Dc5e32RQnZM",
+      "owner": "8cjNrAn6ktJRF7mdCEUZD1t2fdRbwuZdhfRV97whw5GP",
+      "name": "wrbehne",
+      "symbol": "wrbehne",
+      "uri": "https://cf-ipfs.com/ipfs/QmcVvEePBNVtqhy5b2Ue5ecybe6qERsVXGNJYDnaauXVjP",
+      "amount": "1050000",
+      "decimals": 6,
+      "uiAmount": 1.05,
+      "uiAmountString": "1.05"
+    },
+    {
+      "mint": "So11111111111111111111111111111111111111112",
+      "owner": "8cjNrAn6ktJRF7mdCEUZD1t2fdRbwuZdhfRV97whw5GP",
+      "name": "Wrapped SOL",
+      "symbol": "SOL",
+      "uri": "",
+      "amount": 88535867,
+      "decimals": 9,
+      "uiAmount": 0.088535867,
+      "uiAmountString": "0.088535867"
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 import fs from 'fs';
+import base58 from "bs58";
 import readLine from 'readline';
 import { Metaplex } from '@metaplex-foundation/js';
 import { Keypair, PublicKey, Connection } from '@solana/web3.js';
@@ -95,7 +96,7 @@ const getDetailsFromTokenMint = async (tokenMintAddress: string) => {
 /**
  * Load multiple wallets from csv file
  * @param filePath string
- * @returns walletsInfo 
+ * @returns walletConfigs 
  */
 const loadWallets = async (filePath: string) => {
   const fileStream = fs.createReadStream(filePath);
@@ -106,7 +107,7 @@ const loadWallets = async (filePath: string) => {
   });
 
   let headers: Array<string> = [];
-  const walletsInfo = [];
+  const walletConfigs = [];
   for await (const lines of rl) {
     const line = lines.split(',');
     if (!headers.length) {
@@ -116,11 +117,11 @@ const loadWallets = async (filePath: string) => {
       for (let i = 0; i < headers.length; i ++) {
         wallet[headers[i]] = line[i];
       }
-      walletsInfo.push(wallet);
+      walletConfigs.push(wallet);
     }
   }
 
-  return walletsInfo;
+  return walletConfigs;
 }
 
 /**
@@ -177,11 +178,31 @@ const loadWalletInfo = async (connection: Connection, metaplex: Metaplex, wallet
   return splTokens.concat([solInfo]).filter((info) => info.amount);
 }
 
+/**
+ * Load wallet infos from private keys array
+ * @param connection : Connection
+ * @param metaplex : Metaplex
+ * @param privateKeys : PublicKey
+ * @returns Object
+ */
+const loadWalletFromPrivateKeys = async (connection: Connection, metaplex: Metaplex, privateKeys: Array<string>) => {
+  const result: any = {};
+  for (const key of privateKeys) {
+    const secretKey = base58.decode(key);
+    const owner = Keypair.fromSecretKey(secretKey);
+    const tokenInfos = await loadWalletInfo(connection, metaplex, owner.publicKey);
+    result[key] = tokenInfos;
+  }
+
+  return result;
+}
+
 export {
   createAssociatedTokenAccount,
   findAssociatedTokenAddress,
   checkAssociatedTokenAcount,
   getDetailsFromTokenMint,
   loadWallets,
-  loadWalletInfo
+  loadWalletInfo,
+  loadWalletFromPrivateKeys
 };
