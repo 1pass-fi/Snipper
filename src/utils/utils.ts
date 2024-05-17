@@ -3,6 +3,7 @@ import readLine from 'readline';
 import { Metaplex } from '@metaplex-foundation/js';
 import { Keypair, PublicKey, Connection } from '@solana/web3.js';
 import { Token, TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID } from '@solana/spl-token';
+import { TokenInfo } from '../@types/TokenInfo';
 
 /**
  * Check if the associated token account exists
@@ -127,13 +128,13 @@ const loadWallets = async (filePath: string) => {
  * @param connection : Connection
  * @param walletPrivateKey PublicKey
  */
-const loadWalletInfo = async (connection: Connection, metaplex: Metaplex, walletPrivateKey: PublicKey) => {
+const loadWalletInfo = async (connection: Connection, metaplex: Metaplex, walletPrivateKey: PublicKey): Promise<Array<TokenInfo>> => {
   const solBalance = await connection.getBalance(walletPrivateKey);
   const tokenAccounts = await connection.getParsedTokenAccountsByOwner(walletPrivateKey, {
     programId: TOKEN_PROGRAM_ID
   });
 
-  const solInfo = {
+  const solInfo: TokenInfo = {
     mint: 'So11111111111111111111111111111111111111112',
     owner: walletPrivateKey.toBase58(),
     name: 'Wrapped SOL',
@@ -145,7 +146,7 @@ const loadWalletInfo = async (connection: Connection, metaplex: Metaplex, wallet
     uiAmountString: String(solBalance / (Math.pow(10, 9))),
   }
 
-  const splTokens = await Promise.all(tokenAccounts.value.map(async ({account}) => {
+  const splTokens: Array<TokenInfo> = await Promise.all(tokenAccounts.value.map(async ({account}) => {
     const data = account.data.parsed.info;
     const tokenData = {
       mint: data.mint,
