@@ -122,7 +122,7 @@ const loadWallets = async (filePath: string) => {
   }
 
   return walletConfigs;
-}
+};
 
 /**
  * Load wallet info from Network
@@ -176,7 +176,7 @@ const loadWalletInfo = async (connection: Connection, metaplex: Metaplex, wallet
   }));
 
   return splTokens.concat([solInfo]).filter((info) => info.amount);
-}
+};
 
 /**
  * Load wallet infos from private keys array
@@ -195,7 +195,7 @@ const loadWalletFromPrivateKeys = async (connection: Connection, metaplex: Metap
   }
 
   return result;
-}
+};
 
 export {
   createAssociatedTokenAccount,

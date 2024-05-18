@@ -13,10 +13,10 @@ const main = async() => {
   const metaplex = Metaplex.make(connection);
   const secretKey = base58.decode(process.env.PRIVATE_KEY ?? '');
   const owner = Keypair.fromSecretKey(secretKey);
-  // await buyTransaction(process.env.PRIVATE_KEY, TOKEN_MINT_ADDRESS);
-  // await sellTransaction(process.env.PRIVATE_KEY, TOKEN_MINT_ADDRESS);
-  const tokenInfos = await loadWalletInfo(connection, metaplex, owner.publicKey);
-  console.log(tokenInfos);
+  // await buyTransaction(process.env.PRIVATE_KEY ?? '', TOKEN_MINT_ADDRESS, 0.0001, 100);
+  await sellTransaction(process.env.PRIVATE_KEY ?? '', TOKEN_MINT_ADDRESS, 3500, 10);
+  // const tokenInfos = await loadWalletInfo(connection, metaplex, owner.publicKey);
+  // console.log(tokenInfos);
 }
 
 main();

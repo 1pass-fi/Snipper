@@ -1,7 +1,8 @@
 {
   "scripts": {
     "start": "tsc && node ./built/index.js",
-    "load-wallets": "tsc && node ./built/cli/loadWallets.js load-wallets"
+    "load-wallets": "tsc && node ./built/cli/loadWallets.js load-wallets",
+    "swap-transaction": "tsc && node ./built/cli/swapTransaction.js swap-transaction"
   },
   "dependencies": {
     "@coral-xyz/anchor": "^0.26.0",

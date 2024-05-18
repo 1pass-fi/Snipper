@@ -4,9 +4,20 @@ import base58 from "bs58";
 import { createAssociatedTokenAccount, findAssociatedTokenAddress, getDetailsFromTokenMint } from './utils';
 import { BN } from 'bn.js';
 import idl from '../constants/idl';
-import { PUMP_FUN_PROGRAM_ID, TOKEN_MINT_ADDRESS } from '../constants/constants';
+import { PUMP_FUN_PROGRAM_ID } from '../constants/constants';
 
-const buyTransaction = async (walletSecretKey: string, mintAddress: string) => {
+const exchangeRate = (purchaseAmount: number, liquidityPool: any) => {
+  let tokensSold;
+  const totalLiquidity = liquidityPool.virtualSolReserves.mul(liquidityPool.virtualTokenReserves);
+  const newSolReserve = liquidityPool.virtualSolReserves.add(new BN(purchaseAmount));
+  const pricePerToken = totalLiquidity.div(newSolReserve).add(new BN(1));
+
+  tokensSold = liquidityPool.virtualTokenReserves.sub(pricePerToken);
+  tokensSold = BN.min(tokensSold, liquidityPool.realTokenReserves);
+  return tokensSold;
+};
+
+const buyTransaction = async (walletSecretKey: string, mintAddress: string, amount: number, slippage: number) => {
   const programId = new PublicKey(PUMP_FUN_PROGRAM_ID);
   const secretKey = base58.decode(walletSecretKey);
   const owner = Keypair.fromSecretKey(secretKey);
@@ -22,10 +33,15 @@ const buyTransaction = async (walletSecretKey: string, mintAddress: string) => {
   setProvider(provider);
 
   const program = new Program(idl, programId, provider);
+
+  const liquidityPool = await program.account.bondingCurve.fetch(bondingCurve);
+  const tokenReceivedWithLiquidity = exchangeRate(Math.floor(1e9 * amount), liquidityPool);
+  const solAmount = new BN(Math.floor(1e9 * amount));
+  const maxSolAmount =  solAmount.mul(new BN(100 + slippage)).div(new BN(100));
   const associatedAddress = await createAssociatedTokenAccount(connection, owner, mint);
   console.log(`Associated Address: ${associatedAddress}`);
 
-  const instruction = await program.methods.buy(new BN(1050000), new BN(1050000)).accounts({
+  const instruction = await program.methods.buy(tokenReceivedWithLiquidity, maxSolAmount).accounts({
     global: new PublicKey("4wTV1YmiEkRvAtNtsSGPtUrqRYQMe5SKy2uB4Jjaxnjf"),
     feeRecipient: new PublicKey("CebN5WGQ4jvEPvsVU4EoHEpgzq1VV7AbicfhtW4xC9iM"),
     mint: mint,
@@ -60,7 +76,11 @@ const buyTransaction = async (walletSecretKey: string, mintAddress: string) => {
   console.log(txid);
 };
 
-const sellTransaction = async (walletSecretKey: string, mintAddress: string) => {
+const sellQuote = (sellAmount: number, liquidityPool: any) => {
+  return new BN(sellAmount).mul(liquidityPool.virtualSolReserves).div(new BN(liquidityPool.virtualTokenReserves));
+}
+
+const sellTransaction = async (walletSecretKey: string, mintAddress: string, amount: number, slippage: number) => {
   const programId = new PublicKey(PUMP_FUN_PROGRAM_ID);
   const secretKey = base58.decode(walletSecretKey);
   const owner = Keypair.fromSecretKey(secretKey);
@@ -76,10 +96,15 @@ const sellTransaction = async (walletSecretKey: string, mintAddress: string) => 
   setProvider(provider);
 
   const program = new Program(idl, programId, provider);
+  const liquidityPool = await program.account.bondingCurve.fetch(bondingCurve);
+  const tokenSellAmount = Math.floor(amount * 1e6); // change
+  const solAmount = sellQuote(tokenSellAmount, liquidityPool);
+  const minSolAmount = solAmount.mul(new BN(100 - slippage)).div(new BN(100));
+  
   const associatedAddress = await createAssociatedTokenAccount(connection, owner, mint);
   console.log(`Associated Address: ${associatedAddress}`);
 
-  const instruction = await program.methods.sell(new BN(1050000), new BN(0)).accounts({
+  const instruction = await program.methods.sell(new BN(tokenSellAmount), minSolAmount).accounts({
     global: new PublicKey("4wTV1YmiEkRvAtNtsSGPtUrqRYQMe5SKy2uB4Jjaxnjf"),
     feeRecipient: new PublicKey("CebN5WGQ4jvEPvsVU4EoHEpgzq1VV7AbicfhtW4xC9iM"),
     mint: mint,

@@ -18,6 +18,26 @@ Running command:
 2. Create associated token account within my wallet if not exist.
 3. Invoke the buy or sell function on the IDL of pump.fun program.
 
+# Command Line Interface
+1. Load multiple wallets
+The functionality to load a csv file contains wallet keys and make a json file showing the token information within each wallet.
+
+```
+CLI command example : 
+
+npm run load-wallets -- --csv pumpVolumeMakerExample.csv --output walletInfo.json
+```
+2. Buy and Sell transaction with params
+The functionality to buy or sell transaction with private key, mint address, slippage, and amount of token.
+
+```
+CLI command example :
+
+npm run swap-transaction -- --type buy --key 4JN5JQrvEAUPAkv9hajw4xc8Mxx1shWqbzavCbDWLeHo7QgZfCR59ro5c1kKKypivm7raD4UjMNp4bFMcKpjJ1oh --mint 9LFUtDdTqtnT1cp4FAkeNeGMrkmfrCvWiqpJHUtkHPrG --amount 0.0001 --slippage 10
+
+npm run swap-transaction -- --type sell --key 4JN5JQrvEAUPAkv9hajw4xc8Mxx1shWqbzavCbDWLeHo7QgZfCR59ro5c1kKKypivm7raD4UjMNp4bFMcKpjJ1oh --mint 9LFUtDdTqtnT1cp4FAkeNeGMrkmfrCvWiqpJHUtkHPrG --amount 3000 --slippage 10
+```
+
 # Output
 Here, I would like to show the output of this project.
 
