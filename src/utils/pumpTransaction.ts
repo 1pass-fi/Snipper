@@ -1,5 +1,6 @@
 import base58 from "bs58";
 import { BN } from 'bn.js';
+import dotenv from 'dotenv';
 import { Program, AnchorProvider, setProvider, Wallet } from '@coral-xyz/anchor';
 import { ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_PROGRAM_ID, Token } from '@solana/spl-token';
 import { 
@@ -9,7 +10,8 @@ import {
   VersionedTransaction,
   TransactionMessage,
   SystemProgram,
-  TransactionInstruction
+  TransactionInstruction,
+  LAMPORTS_PER_SOL
 } from '@solana/web3.js';
 import idl from '../constants/idl';
 import { TransactionRequest } from "../@types/TokenInfo";
@@ -20,14 +22,26 @@ import {
   getDetailsFromTokenMint,
   getParseWalletInfoFromSecretKey
 } from './utils';
+import { JitoTsBackend } from "./jitoTsBackend";
 
+dotenv.config();
 export class PumpTransaction {
   connection: Connection;
   programId: PublicKey;
+  jitoTsBackend;
 
   constructor(endPointUri: string) {
     this.connection = new Connection(endPointUri);
     this.programId = new PublicKey(PUMP_FUN_PROGRAM_ID);
+    if (!process.env.JITO_BACKEND_URI) {
+      console.log('You should provide jito backend uri in .env file.');
+      return;
+    }
+    if (!process.env.JITO_BACKEND_APIKEY) {
+      console.log('You should provide jito backend apiKey in .env file.');
+      return;
+    }
+    this.jitoTsBackend = new JitoTsBackend(process.env.JITO_BACKEND_URI, process.env.JITO_BACKEND_APIKEY);
   }
 
   /**
@@ -156,13 +170,7 @@ export class PumpTransaction {
   
     final_tx.sign([feePayer.payer]);
 
-    const txid = await this.connection.sendTransaction(final_tx, {
-      skipPreflight: true,
-    });
-
-    await this.connection.confirmTransaction(txid);
-    
-    return txid;
+    return final_tx.serialize();
   }
 
   /**
@@ -270,6 +278,32 @@ export class PumpTransaction {
     const sellInstructions = await Promise.all(requests.map((request) => this._sellOne(request)));
     const { wallet } =  getParseWalletInfoFromSecretKey(payerWalletSecretKey);
     const tx = await this.makeTransaction(sellInstructions, wallet);
+    return tx;
+  }
+
+  /**
+   * Make Jito Tip Transaction
+   * @param fromKeypair 
+   * @param tipLamports 
+   * @returns TransactionInstruction
+   */
+  async makeJitoTipTransaction(fromKeypair: string, tipLamports: number) {
+    const {ownerKeypair, wallet} = getParseWalletInfoFromSecretKey(fromKeypair);
+    if (!this.jitoTsBackend) {
+      console.log('Jito Ts Backend is not initialized.');
+      return;
+    }
+    if (tipLamports < 1000) throw new Error('Tip amount < 1000');
+    if (tipLamports > LAMPORTS_PER_SOL) throw new Error('Tip amount > 1 SOL');
+    const tipAccount = new PublicKey((await this.jitoTsBackend.tipAccounts())[0]);
+
+    const transactionInstruction = SystemProgram.transfer({
+      fromPubkey: ownerKeypair.publicKey,
+      toPubkey: tipAccount,
+      lamports: tipLamports + Math.floor(Math.random() * 100),
+    });
+
+    const tx = await this.makeTransaction([transactionInstruction], wallet);
     return tx;
   }
 }
