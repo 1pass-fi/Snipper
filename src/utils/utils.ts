@@ -2,9 +2,25 @@ import fs from 'fs';
 import base58 from "bs58";
 import readLine from 'readline';
 import { Metaplex } from '@metaplex-foundation/js';
+import { Wallet } from '@coral-xyz/anchor';
 import { Keypair, PublicKey, Connection } from '@solana/web3.js';
 import { Token, TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { TokenInfo } from '../@types/TokenInfo';
+
+/**
+ * Get parsed and wallet info from secret key
+ * @param walletSecretKey 
+ * @returns Object
+ */
+const getParseWalletInfoFromSecretKey = (walletSecretKey: string) => {
+  const secretKey = base58.decode(walletSecretKey);
+  const owner = Keypair.fromSecretKey(secretKey);
+  const wallet = new Wallet(Keypair.fromSecretKey(secretKey));
+  return {
+    ownerKeypair: owner,
+    wallet
+  };
+}
 
 /**
  * Check if the associated token account exists
@@ -58,6 +74,7 @@ const createAssociatedTokenAccount = async (connection: Connection, owner: Keypa
   if (!associatedTokenAccountInfo) {
     // Create the associated token account if it doesn't exist
     await mint.createAssociatedTokenAccount(owner.publicKey);
+    console.log(`Associated token created from token (${mintPublicKey})`);
   } 
   return associatedTokenAddress.toBase58();
 };
@@ -198,6 +215,7 @@ const loadWalletFromPrivateKeys = async (connection: Connection, metaplex: Metap
 };
 
 export {
+  getParseWalletInfoFromSecretKey,
   createAssociatedTokenAccount,
   findAssociatedTokenAddress,
   checkAssociatedTokenAcount,

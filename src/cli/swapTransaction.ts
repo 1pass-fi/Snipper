@@ -4,7 +4,7 @@ import { Command } from "commander";
 import { Connection, Keypair } from '@solana/web3.js';
 import { Metaplex } from '@metaplex-foundation/js';
 import { loadWalletFromPrivateKeys, loadWallets } from '../utils/utils.js';
-import { buyTransaction, sellTransaction } from '../utils/swapTransactions.js';
+import { PumpTransaction } from '../utils/pumpTransaction.js';
 
 const program = new Command();
 
@@ -36,12 +36,25 @@ program.parse(process.argv);
     return;
   }
   config();
+  const pumpTransaction = new PumpTransaction('https://api.mainnet-beta.solana.com');
+  let txid;
   switch(type) {
     case 'buy':
-      await buyTransaction(key, mint, Number(amount), Number(slippage));
+      txid = await pumpTransaction.buyOne({
+        walletSecretKey: key,
+        mintAddress: mint,
+        amount: Number(amount),
+        slippage: Number(slippage)
+      });
       break;
     case 'sell':
-      await sellTransaction(key, mint, Number(amount), Number(slippage));
+      txid = await pumpTransaction.sellOne({
+        walletSecretKey: key,
+        mintAddress: mint,
+        amount: Number(amount),
+        slippage: Number(slippage)
+      });
       break;
   }
+  console.log(txid);
 })();

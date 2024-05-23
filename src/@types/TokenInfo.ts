@@ -9,3 +9,10 @@ export interface TokenInfo {
   uiAmount: Number,
   uiAmountString: string,
 };
+
+export interface TransactionRequest {
+  walletSecretKey: string,
+  mintAddress: string,
+  amount: number,
+  slippage: number
+};

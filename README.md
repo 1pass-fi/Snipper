@@ -33,9 +33,9 @@ The functionality to buy or sell transaction with private key, mint address, sli
 ```
 CLI command example :
 
-npm run swap-transaction -- --type buy --key 4JN5JQrvEAUPAkv9hajw4xc8Mxx1shWqbzavCbDWLeHo7QgZfCR59ro5c1kKKypivm7raD4UjMNp4bFMcKpjJ1oh --mint 9LFUtDdTqtnT1cp4FAkeNeGMrkmfrCvWiqpJHUtkHPrG --amount 0.0001 --slippage 10
+npm run swap-transaction -- --type buy --key <private-key> --mint 9LFUtDdTqtnT1cp4FAkeNeGMrkmfrCvWiqpJHUtkHPrG --amount 0.0001 --slippage 10
 
-npm run swap-transaction -- --type sell --key 4JN5JQrvEAUPAkv9hajw4xc8Mxx1shWqbzavCbDWLeHo7QgZfCR59ro5c1kKKypivm7raD4UjMNp4bFMcKpjJ1oh --mint 9LFUtDdTqtnT1cp4FAkeNeGMrkmfrCvWiqpJHUtkHPrG --amount 3000 --slippage 10
+npm run swap-transaction -- --type sell --key <private-key> --mint 9LFUtDdTqtnT1cp4FAkeNeGMrkmfrCvWiqpJHUtkHPrG --amount 3000 --slippage 10
 ```
 
 # Output
