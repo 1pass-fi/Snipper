@@ -52,6 +52,7 @@ const WalletBuyTable = ({data}: {
       }))
     });
     console.log(res.data.jitoTx);
+    alert(`Buy transaction id: ${res.data.jitoTx}`);
   }
 
   return (

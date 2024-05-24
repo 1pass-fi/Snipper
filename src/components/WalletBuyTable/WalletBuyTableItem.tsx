@@ -24,6 +24,7 @@ const WalletBuyTableItem = ({item, index, updateBuyWallets}: {
       }]
     });
       console.log(res.data.jitoTx);
+      alert(`Buy transaction id: ${res.data.jitoTx}`);
     })();
   };
 
