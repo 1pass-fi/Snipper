@@ -2,7 +2,7 @@ import fs from 'fs';
 import base58 from "bs58";
 import readLine from 'readline';
 import { Metaplex } from '@metaplex-foundation/js';
-import { Wallet } from '@coral-xyz/anchor';
+import { Wallet } from '@coral-xyz/anchor/dist/cjs/index';
 import { Keypair, PublicKey, Connection } from '@solana/web3.js';
 import { Token, TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { TokenInfo } from '../@types/TokenInfo';

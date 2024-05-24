@@ -1,53 +1,36 @@
-# Pump Fun Swap Transaction
-This test project aims to execute swap transaction on the pump.fun. <br/>
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-Input Params:
-```
-- Wallet secret Key (Save in the .env file so that it can't be shared with others. I added example.env and you can customize it.)
+## Getting Started
 
-- Token Mint Address (Token address you want to buy or sell)
-```
+First, run the development server:
 
-Running command:
-```
-  npm install
-  npm start
-```
-
-1. Check the associated token is existed in my wallet.
-2. Create associated token account within my wallet if not exist.
-3. Invoke the buy or sell function on the IDL of pump.fun program.
-
-# Command Line Interface
-1. Load multiple wallets
-The functionality to load a csv file contains wallet keys and make a json file showing the token information within each wallet.
-
-```
-CLI command example : 
-
-npm run load-wallets -- --csv pumpVolumeMakerExample.csv --output walletInfo.json
-```
-2. Buy and Sell transaction with params
-The functionality to buy or sell transaction with private key, mint address, slippage, and amount of token.
-
-```
-CLI command example :
-
-npm run swap-transaction -- --type buy --key <private-key> --mint 9LFUtDdTqtnT1cp4FAkeNeGMrkmfrCvWiqpJHUtkHPrG --amount 0.0001 --slippage 10
-
-npm run swap-transaction -- --type sell --key <private-key> --mint 9LFUtDdTqtnT1cp4FAkeNeGMrkmfrCvWiqpJHUtkHPrG --amount 3000 --slippage 10
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-# Output
-Here, I would like to show the output of this project.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-![image](imgs/wallet.png) <br/>
-This is the image of my wallet (phantom)
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
+This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-![image](imgs/token_account.png)<br/>
-This is the image of my account for tokens.
+## Learn More
 
+To learn more about Next.js, take a look at the following resources:
 
-![image](imgs/transaction.png)<br/>
-This is the image of transaction details
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

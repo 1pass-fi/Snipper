@@ -16,3 +16,12 @@ export interface TransactionRequest {
   amount: number,
   slippage: number
 };
+
+export interface WalletInfo {
+  wallet: string,
+  balance: number,
+  solBuy: number,
+  delayms: number,
+  slippage: number,
+  jitoTip: number,
+};

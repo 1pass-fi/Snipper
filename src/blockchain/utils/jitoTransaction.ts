@@ -20,7 +20,6 @@ export class JitoTransaction {
     }
     const txs = await Promise.all(actionRequests.map((request) => this.pumpTransaction.buyOne(request)));
     txs.push(jitoTx);
-    console.log(JSON.stringify(txs.map(tx => Array.from(tx))));
     const data = await fetch('http://49.13.165.12:80/send-bundle', {
       method: 'post',
       headers: {
@@ -45,7 +44,6 @@ export class JitoTransaction {
     }
     const txs = await Promise.all(actionRequests.map((request) => this.pumpTransaction.sellOne(request)));
     txs.push(jitoTx);
-    console.log(JSON.stringify(txs.map(tx => Array.from(tx))));
     const data = await fetch('http://49.13.165.12:80/send-bundle', {
       method: 'post',
       headers: {
