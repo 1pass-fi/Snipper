@@ -61,7 +61,7 @@ const ClientComponent = () => {
       setTokenAddress
     }}>
       <div>
-        <input type="text" value={tokenAddress} onChange={e => changeTokenAddress(e)} />
+        <input className="text-xs p-2 m-2 w-80" type="text" value={tokenAddress} onChange={e => changeTokenAddress(e)} />
       </div>
       <div>
         <File value={filePath} onChange={changeFilePath} />

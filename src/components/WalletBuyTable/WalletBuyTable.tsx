@@ -1,13 +1,15 @@
 import axios from "axios";
-import { useCallback, useState, useMemo } from "react";
+import { useCallback, useState, useMemo, useContext } from "react";
 import { nanoid } from "nanoid";
 import { BuyRequest } from "@/@types";
 import WalletBuyTableItem from "./WalletBuyTableItem";
+import { TokenAddressContext } from "@/context/tokenAddresContext";
 import Button from "../Button";
 
 const WalletBuyTable = ({data}: {
   data: Array<any>
 }) => {
+  const {tokenAddress} = useContext(TokenAddressContext);
   const [checkedWallets, setCheckedWallets] = useState<Array<BuyRequest>>([]);
   const updateBuyWallets = useCallback((data: BuyRequest) => {
     const currentWallet = checkedWallets.find((item: BuyRequest) => item.index === data.index);
@@ -26,7 +28,7 @@ const WalletBuyTable = ({data}: {
   }, [checkedWallets, setCheckedWallets]);
 
   const dataWithCheck = useMemo(() => {
-    return data.map((item, index) => ({
+    return !data ? [] : data.map((item, index) => ({
       ...item,
       checked: checkedWallets.find(item => item.index === index) ? true : false
     }));
@@ -42,6 +44,10 @@ const WalletBuyTable = ({data}: {
 
   const buyAllChecked = async (e: MouseEvent) => {
     e.preventDefault();
+    if (!tokenAddress) {
+      alert("Please enter token address");
+      return;
+    }
     const res = await axios.post('/api/buy-transaction', {
       data: checkedWallets.map(({walletKey, buyAmount, slippage, jitoTip, mintAddress}: BuyRequest) => ({
         walletKey: walletKey,

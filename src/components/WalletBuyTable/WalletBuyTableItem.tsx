@@ -13,19 +13,23 @@ const WalletBuyTableItem = ({item, index, updateBuyWallets}: {
   const {PRIVATE_KEY, buyAmountSOL, slippage, buyDelayMs, jitoTip, solBalance} = item;
 
   const clickBuy = (e: MouseEvent) => {
-    (async () => {
+    if (!tokenAddress) {
+      alert("Please enter token address");
+      return;
+    }
+    setTimeout(async () => {
       const res = await axios.post('/api/buy-transaction', {
         data: [{
-        walletKey: PRIVATE_KEY,
-        buyAmount: buyAmountSOL,
-        slippage: slippage,
-        jitoTip: jitoTip,
-        mintAddress: tokenAddress
-      }]
-    });
+          walletKey: PRIVATE_KEY,
+          buyAmount: buyAmountSOL,
+          slippage: slippage,
+          jitoTip: jitoTip,
+          mintAddress: tokenAddress
+        }]
+      });
       console.log(res.data.jitoTx);
       alert(`Buy transaction id: ${res.data.jitoTx}`);
-    })();
+    }, item.buyDelayMs);
   };
 
   const changeCheck = (event: ChangeEvent<HTMLInputElement>) => {
@@ -49,7 +53,7 @@ const WalletBuyTableItem = ({item, index, updateBuyWallets}: {
       <td className="px-2">{jitoTip}</td>
       <td className="px-2">
         <Button value="Buy" onClick={clickBuy}/>
-        <input type="checkbox" checked={item.checked} onChange={e => changeCheck(e)} />
+        <input className="ml-2" type="checkbox" checked={item.checked} onChange={e => changeCheck(e)} />
       </td>
     </tr>
   )
