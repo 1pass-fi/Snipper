@@ -66,7 +66,6 @@ const createAssociatedTokenAccount = async (connection: Connection, owner: Keypa
     mintPublicKey,
     owner.publicKey
   );
-  
   // Check if the associated token account already exists
   const associatedTokenAccountInfo = await connection.getAccountInfo(associatedTokenAddress);
   const mint = new Token(connection, mintPublicKey, TOKEN_PROGRAM_ID, owner );

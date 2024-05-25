@@ -1,4 +1,5 @@
 export interface WalletBuyTableItemParam {
+  publicKey: string,
   PRIVATE_KEY: string,
   buyAmountSOL: number,
   slippage: number,

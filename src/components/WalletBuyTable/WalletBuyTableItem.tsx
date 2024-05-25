@@ -10,7 +10,7 @@ const WalletBuyTableItem = ({item, index, updateBuyWallets}: {
   updateBuyWallets: (data: BuyRequest) => void
 }) => {
   const {tokenAddress} = useContext(TokenAddressContext);
-  const {PRIVATE_KEY, buyAmountSOL, slippage, buyDelayMs, jitoTip, solBalance} = item;
+  const {PRIVATE_KEY, buyAmountSOL, slippage, buyDelayMs, jitoTip, solBalance, publicKey} = item;
 
   const clickBuy = (e: MouseEvent) => {
     if (!tokenAddress) {
@@ -45,7 +45,7 @@ const WalletBuyTableItem = ({item, index, updateBuyWallets}: {
 
   return (
     <tr className={`${index % 2 ? 'bg-slate-800' : 'bg-slate-600'} px-2 py-4`}>
-      <td className="px-2">{PRIVATE_KEY}</td>
+      <td className="px-2">{publicKey}</td>
       <td className="px-2">{solBalance}</td>
       <td className="px-2">{buyAmountSOL}</td>
       <td className="px-2">{buyDelayMs}</td>

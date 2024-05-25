@@ -33,7 +33,8 @@ const ClientComponent = () => {
         const solBalances = await Promise.all(promises);
         const walletInfo = results.data.map((item: any, index) => ({
           ...item,
-          solBalance: solBalances[index].data.solBalance / Math.pow(10, 9)
+          solBalance: solBalances[index].data.solBalance / Math.pow(10, 9),
+          publicKey: solBalances[index].data.publicKey
         }));
         console.log(walletInfo);
         setWalletData(walletInfo);

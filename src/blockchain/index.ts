@@ -13,7 +13,7 @@ config();
 
 const main = async() => {
 
-  const jitoTransaction = new JitoTransaction('https://api.mainnet-beta.solana.com');
+  const jitoTransaction = new JitoTransaction(process.env.HTTPS_SERVER ?? 'https://api.mainnet-beta.solana.com');
   const tokens = await loadWallets('pumpVolumeMakerExample.csv');
   const actionRequests: Array<TransactionRequest> = tokens.map(token => ({
     walletSecretKey: token.PRIVATE_KEY,
