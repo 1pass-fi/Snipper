@@ -72,10 +72,17 @@ const createAssociatedTokenAccount = async (connection: Connection, owner: Keypa
   
   if (!associatedTokenAccountInfo) {
     // Create the associated token account if it doesn't exist
-    await mint.createAssociatedTokenAccount(owner.publicKey);
     console.log(`Associated token created from token (${mintPublicKey})`);
+    return Token.createAssociatedTokenAccountInstruction(
+      ASSOCIATED_TOKEN_PROGRAM_ID,
+      TOKEN_PROGRAM_ID,
+      mintPublicKey,
+      associatedTokenAddress,
+      owner.publicKey,
+      owner.publicKey
+    );
   } 
-  return associatedTokenAddress.toBase58();
+  return false;
 };
 
 /**

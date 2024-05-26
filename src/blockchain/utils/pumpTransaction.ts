@@ -157,8 +157,7 @@ export class PumpTransaction {
 
     const {bondingCurve, associatedBondingCurve} = await getDetailsFromTokenMint(mintAddress);
     const associatedTokenPDA = findAssociatedTokenAddress(wallet.publicKey, mint);
-    const associatedAddress = await createAssociatedTokenAccount(this.connection, ownerKeypair, mint);
-    console.log(`Associated token address: ${associatedAddress}`);
+    const associatedTokenAccountInstruction = await createAssociatedTokenAccount(this.connection, ownerKeypair, mint);
 
     const buyInstruction = await this.makeBuyInstruction(
       wallet,
@@ -170,7 +169,10 @@ export class PumpTransaction {
       slippage
     );
     
-    return buyInstruction;
+    return {
+      buyInstruction,
+      associatedTokenAccountInstruction
+    };
   }
 
   /**
@@ -179,14 +181,18 @@ export class PumpTransaction {
    * @returns Transaction Id
    */
   async buyOne (request: TransactionRequest) {
-    const buyInstruction = await this._buyOne(request);
+    const { buyInstruction, associatedTokenAccountInstruction } = await this._buyOne(request);
     const {wallet} = getParseWalletInfoFromSecretKey(request.walletSecretKey);
     const jitoTx = await this.makeJitoTipTransaction(request.walletSecretKey, request.jitoTip * Math.pow(10, 9));
     if (!jitoTx) {
       return;
     }
-    const tx = await this.makeTransaction([buyInstruction, jitoTx], wallet);
-    return tx;
+
+    if (typeof associatedTokenAccountInstruction === "boolean") {
+      return await this.makeTransaction([buyInstruction, jitoTx], wallet);
+    }
+
+    return await this.makeTransaction([associatedTokenAccountInstruction, buyInstruction, jitoTx], wallet);
   }
 
   /**
@@ -202,8 +208,7 @@ export class PumpTransaction {
     const {bondingCurve, associatedBondingCurve} = await getDetailsFromTokenMint(mintAddress);
 
     const associatedTokenPDA = findAssociatedTokenAddress(wallet.publicKey, mint);
-    const associatedAddress = await createAssociatedTokenAccount(this.connection, ownerKeypair, mint);
-    console.log(`Associated Address: ${associatedAddress}`);
+    const associatedTokenAccountInstruction = await createAssociatedTokenAccount(this.connection, ownerKeypair, mint);
 
     const sellInstruction = await this.makeSellInstruction(
       wallet,
@@ -215,7 +220,10 @@ export class PumpTransaction {
       slippage
     );
 
-    return sellInstruction;
+    return {
+      sellInstruction,
+      associatedTokenAccountInstruction
+    };
   }
 
   /**
@@ -224,11 +232,19 @@ export class PumpTransaction {
    * @returns Transaction Id
    */
   async sellOne(request: TransactionRequest) {
-    const sellInstruction = await this._sellOne(request);
-    const {ownerKeypair, wallet} = getParseWalletInfoFromSecretKey(request.walletSecretKey);
-    const tx = await this.makeTransaction([sellInstruction], wallet);
-    return tx;
+    
+    const { sellInstruction, associatedTokenAccountInstruction } = await this._sellOne(request);
+    const {wallet} = getParseWalletInfoFromSecretKey(request.walletSecretKey);
+    const jitoTx = await this.makeJitoTipTransaction(request.walletSecretKey, request.jitoTip * Math.pow(10, 9));
+    if (!jitoTx) {
+      return;
+    }
 
+    if (typeof associatedTokenAccountInstruction === "boolean") {
+      return await this.makeTransaction([sellInstruction, jitoTx], wallet);
+    }
+
+    return await this.makeTransaction([associatedTokenAccountInstruction, sellInstruction, jitoTx], wallet);
   }
 
   /**
@@ -238,7 +254,7 @@ export class PumpTransaction {
    * @returns TransactionInstruction
    */
   async makeJitoTipTransaction(fromKeypair: string, tipLamports: number) {
-    const {ownerKeypair, wallet} = getParseWalletInfoFromSecretKey(fromKeypair);
+    const {ownerKeypair} = getParseWalletInfoFromSecretKey(fromKeypair);
     if (!this.jitoTsBackend) {
       console.log('Jito Ts Backend is not initialized.');
       return;
