@@ -14,7 +14,8 @@ export interface TransactionRequest {
   walletSecretKey: string,
   mintAddress: string,
   amount: number,
-  slippage: number
+  slippage: number,
+  jitoTip: number
 };
 
 export interface WalletInfo {

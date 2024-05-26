@@ -3,16 +3,12 @@ import { TransactionRequest } from "../@types/TokenInfo";
 
 export class JitoTransaction {
   pumpTransaction: PumpTransaction;
-  constructor(clusterUri: string) {
-    this.pumpTransaction = new PumpTransaction(clusterUri);
-    if (!process.env.JITO_BACKEND_URI) {
-      console.log('You should provide jito backend uri in .env file.');
-      return;
-    }
-    if (!process.env.JITO_BACKEND_APIKEY) {
-      console.log('You should provide jito backend apiKey in .env file.');
-      return;
-    }
+  url: string;
+  apiKey: string;
+  constructor(clusterUri: string, url: string, apiKey: string) {
+    this.pumpTransaction = new PumpTransaction(clusterUri, url, apiKey);
+    this.url = url;
+    this.apiKey = apiKey;
   }
 
   /**
@@ -21,18 +17,13 @@ export class JitoTransaction {
    * @param jitoTip 
    * @returns Transaction Id
    */
-  async buyWithJito(actionRequests: Array<TransactionRequest>, jitoTip: number) {
-    const jitoTx = await this.pumpTransaction.makeJitoTipTransaction(actionRequests[0].walletSecretKey, jitoTip);
-    if (!jitoTx) {
-      return;
-    }
+  async buyWithJito(actionRequests: Array<TransactionRequest>) {
     const txs = await Promise.all(actionRequests.map((request) => this.pumpTransaction.buyOne(request)));
-    txs.push(jitoTx);
-    const data = await fetch(`${process.env.JITO_BACKEND_URI}/send-bundle`, {
+    const data = await fetch(`${this.url}/send-bundle`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
-        authorization: process.env.JITO_BACKEND_APIKEY ?? ''
+        authorization: this.apiKey
       },
       body: JSON.stringify(txs.map(tx => Array.from(tx)))
     });
@@ -45,18 +36,13 @@ export class JitoTransaction {
    * @param jitoTip 
    * @returns Transaction Id
    */
-  async sellWithJito(actionRequests: Array<TransactionRequest>, jitoTip: number) {
-    const jitoTx = await this.pumpTransaction.makeJitoTipTransaction(actionRequests[0].walletSecretKey, jitoTip);
-    if (!jitoTx) {
-      return;
-    }
+  async sellWithJito(actionRequests: Array<TransactionRequest>) {
     const txs = await Promise.all(actionRequests.map((request) => this.pumpTransaction.sellOne(request)));
-    txs.push(jitoTx);
-    const data = await fetch(`${process.env.JITO_BACKEND_URI}/send-bundle`, {
+    const data = await fetch(`${this.url}/send-bundle`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
-        authorization: process.env.JITO_BACKEND_APIKEY ?? ''
+        authorization: this.apiKey
       },
       body: JSON.stringify(txs.map(tx => Array.from(tx)))
     });

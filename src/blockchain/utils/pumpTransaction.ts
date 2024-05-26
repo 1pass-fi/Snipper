@@ -30,38 +30,10 @@ export class PumpTransaction {
   programId: PublicKey;
   jitoTsBackend;
 
-  constructor(endPointUri: string) {
+  constructor(endPointUri: string, url: string, apiKey: string) {
     this.connection = new Connection(endPointUri);
     this.programId = new PublicKey(PUMP_FUN_PROGRAM_ID);
-    if (!process.env.JITO_BACKEND_URI) {
-      console.log('You should provide jito backend uri in .env file.');
-      return;
-    }
-    if (!process.env.JITO_BACKEND_APIKEY) {
-      console.log('You should provide jito backend apiKey in .env file.');
-      return;
-    }
-    this.jitoTsBackend = new JitoTsBackend(process.env.JITO_BACKEND_URI, process.env.JITO_BACKEND_APIKEY);
-  }
-
-  /**
-   * Calculate buy amount
-   * @param program 
-   * @param bondingCurve 
-   * @param amount 
-   * @param slippage 
-   * @returns Object
-   */
-  async calculateBuyAmounts(program: Program, bondingCurve: PublicKey, amount: number, slippage: number) {
-    const liquidityPool = await program.account.bondingCurve.fetch(bondingCurve);
-    const tokenReceivedWithLiquidity = exchangeRate(Math.floor(1e9 * amount), liquidityPool);
-    const solAmount = new BN(Math.floor(1e9 * amount));
-    const maxSolAmount =  solAmount.mul(new BN(100 + slippage)).div(new BN(100));
-
-    return {
-      tokenReceivedWithLiquidity,
-      maxSolAmount
-    };
+    this.jitoTsBackend = new JitoTsBackend(url, apiKey);
   }
 
   /**
@@ -87,7 +59,7 @@ export class PumpTransaction {
     const provider = new AnchorProvider(this.connection, wallet, AnchorProvider.defaultOptions());
     setProvider(provider);
     const program = new Program(idl, this.programId, provider);
-    const {tokenReceivedWithLiquidity, maxSolAmount} = await this.calculateBuyAmounts(program, bondingCurve, amount, slippage);
+    const {tokenReceivedWithLiquidity, maxSolAmount} = await calculateBuyAmounts(program, bondingCurve, amount, slippage);
 
     const instruction = await program.methods.buy(tokenReceivedWithLiquidity, maxSolAmount).accounts({
       global: new PublicKey("4wTV1YmiEkRvAtNtsSGPtUrqRYQMe5SKy2uB4Jjaxnjf"),
@@ -208,8 +180,12 @@ export class PumpTransaction {
    */
   async buyOne (request: TransactionRequest) {
     const buyInstruction = await this._buyOne(request);
-    const {ownerKeypair, wallet} = getParseWalletInfoFromSecretKey(request.walletSecretKey);
-    const tx = await this.makeTransaction([buyInstruction], wallet);
+    const {wallet} = getParseWalletInfoFromSecretKey(request.walletSecretKey);
+    const jitoTx = await this.makeJitoTipTransaction(request.walletSecretKey, request.jitoTip * Math.pow(10, 9));
+    if (!jitoTx) {
+      return;
+    }
+    const tx = await this.makeTransaction([buyInstruction, jitoTx], wallet);
     return tx;
   }
 
@@ -256,32 +232,6 @@ export class PumpTransaction {
   }
 
   /**
-   * Buy one token from multiple wallets
-   * @param requests 
-   * @param payerWalletSecretKey 
-   * @returns Transaction Id
-   */
-  async buyMultiple(requests: Array<TransactionRequest>, payerWalletSecretKey: string) {
-    const buyInstructions = await Promise.all(requests.map((request) => this._buyOne(request)));
-    const { wallet } =  getParseWalletInfoFromSecretKey(payerWalletSecretKey);
-    const tx = await this.makeTransaction(buyInstructions, wallet);
-    return tx;
-  }
-
-  /**
-   * Sell one token from multiple wallets
-   * @param requests 
-   * @param payerWalletSecretKey 
-   * @returns Transaction Id
-   */
-  async sellMultiple(requests: Array<TransactionRequest>, payerWalletSecretKey: string) {
-    const sellInstructions = await Promise.all(requests.map((request) => this._sellOne(request)));
-    const { wallet } =  getParseWalletInfoFromSecretKey(payerWalletSecretKey);
-    const tx = await this.makeTransaction(sellInstructions, wallet);
-    return tx;
-  }
-
-  /**
    * Make Jito Tip Transaction
    * @param fromKeypair 
    * @param tipLamports 
@@ -303,8 +253,7 @@ export class PumpTransaction {
       lamports: tipLamports + Math.floor(Math.random() * 100),
     });
 
-    const tx = await this.makeTransaction([transactionInstruction], wallet);
-    return tx;
+    return transactionInstruction;
   }
 }
 
@@ -327,4 +276,25 @@ const exchangeRate = (purchaseAmount: number, liquidityPool: any) => {
 
 const sellQuote = (sellAmount: number, liquidityPool: any) => {
   return new BN(sellAmount).mul(liquidityPool.virtualSolReserves).div(new BN(liquidityPool.virtualTokenReserves));
+};
+
+
+/**
+ * Calculate buy amount
+ * @param program 
+ * @param bondingCurve 
+ * @param amount 
+ * @param slippage 
+ * @returns Object
+ */
+const calculateBuyAmounts = async(program: Program, bondingCurve: PublicKey, amount: number, slippage: number) => {
+  const liquidityPool = await program.account.bondingCurve.fetch(bondingCurve);
+  const tokenReceivedWithLiquidity = exchangeRate(Math.floor(1e9 * amount), liquidityPool);
+  const solAmount = new BN(Math.floor(1e9 * amount));
+  const maxSolAmount =  solAmount.mul(new BN(100 + slippage)).div(new BN(100));
+
+  return {
+    tokenReceivedWithLiquidity,
+    maxSolAmount
+  };
 };
