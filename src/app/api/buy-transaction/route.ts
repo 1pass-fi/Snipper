@@ -12,11 +12,9 @@ export async function POST(request: Request) {
   const actionRequests: Array<TransactionRequest> = params.data.map((item: BuyRequest) => ({
     walletSecretKey: item.walletKey,
     mintAddress: item.mintAddress,
-    amount: item.buyAmount * Math.pow(10, 9),
+    amount: item.buyAmount,
     slippage: item.slippage
   }));
-
-  console.log(actionRequests);
 
   const jitoTx = await jitoTransaction.buyWithJito(actionRequests, params.data[0].jitoTip * Math.pow(10, 9));
   return Response.json({jitoTx});
