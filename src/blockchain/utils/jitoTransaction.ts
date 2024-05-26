@@ -5,6 +5,14 @@ export class JitoTransaction {
   pumpTransaction: PumpTransaction;
   constructor(clusterUri: string) {
     this.pumpTransaction = new PumpTransaction(clusterUri);
+    if (!process.env.JITO_BACKEND_URI) {
+      console.log('You should provide jito backend uri in .env file.');
+      return;
+    }
+    if (!process.env.JITO_BACKEND_APIKEY) {
+      console.log('You should provide jito backend apiKey in .env file.');
+      return;
+    }
   }
 
   /**
@@ -20,11 +28,11 @@ export class JitoTransaction {
     }
     const txs = await Promise.all(actionRequests.map((request) => this.pumpTransaction.buyOne(request)));
     txs.push(jitoTx);
-    const data = await fetch('http://49.13.165.12:80/send-bundle', {
+    const data = await fetch(`${process.env.JITO_BACKEND_URI}/send-bundle`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
-        authorization: 'sodamnapikey'
+        authorization: process.env.JITO_BACKEND_APIKEY ?? ''
       },
       body: JSON.stringify(txs.map(tx => Array.from(tx)))
     });
@@ -44,11 +52,11 @@ export class JitoTransaction {
     }
     const txs = await Promise.all(actionRequests.map((request) => this.pumpTransaction.sellOne(request)));
     txs.push(jitoTx);
-    const data = await fetch('http://49.13.165.12:80/send-bundle', {
+    const data = await fetch(`${process.env.JITO_BACKEND_URI}/send-bundle`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
-        authorization: 'sodamnapikey'
+        authorization: process.env.JITO_BACKEND_APIKEY ?? ''
       },
       body: JSON.stringify(txs.map(tx => Array.from(tx)))
     });
