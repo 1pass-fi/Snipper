@@ -6,8 +6,9 @@ import WalletBuyTableItem from "./WalletBuyTableItem";
 import { TokenAddressContext } from "@/context/tokenAddresContext";
 import Button from "../Button";
 
-const WalletBuyTable = ({data}: {
-  data: Array<any>
+const WalletBuyTable = ({data, onChangeField}: {
+  data: Array<any>,
+  onChangeField: (index: number, field: string, value: string) => void  
 }) => {
   const {tokenAddress} = useContext(TokenAddressContext);
   const [checkedWallets, setCheckedWallets] = useState<Array<BuyRequest>>([]);
@@ -61,6 +62,10 @@ const WalletBuyTable = ({data}: {
     alert(`Buy transaction id: ${res.data.jitoTx}`);
   }
 
+  const changeFields = (index: number, field: string, value: string) => {
+    onChangeField(index, field, value);
+  }
+
   return (
     <table className="table-auto md:table-fixed min-w-full text-white	text-sm	font-thin  mx-auto ">
       <thead>
@@ -77,7 +82,12 @@ const WalletBuyTable = ({data}: {
       <tbody>
         {
           dataWithCheck.map((item, index) => (
-            <WalletBuyTableItem key={nanoid()} item={item} index={index} updateBuyWallets={updateBuyWallets} />
+            <WalletBuyTableItem
+              key={`${item.publicKey} - ${index}`}
+              item={item}
+              index={index}
+              updateBuyWallets={updateBuyWallets}
+              onChangeField={changeFields}/>
           ))
         }
       </tbody>

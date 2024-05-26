@@ -54,7 +54,19 @@ const ClientComponent = () => {
     event.preventDefault();
     setTokenAddress(event.target.value);
     console.log(event.target.value);
-  }
+  };
+
+  const changeField = (index: number, field: string, value: string) => {
+    setWalletData(walletData.map((item: any, indexOfItem: number) => {
+      if (index === indexOfItem) {
+        return {
+          ...item,
+          [field]: value
+        }
+      }
+      return item;
+    }));
+  };
 
   return (
     <TokenAddressContext.Provider value={{
@@ -69,7 +81,7 @@ const ClientComponent = () => {
         <Button value="Clear wallets" onClick={clearWallets} />
       </div>
       <div>
-        <WalletBuyTable data={walletData}/>
+        <WalletBuyTable data={walletData} onChangeField={changeField}/>
       </div>
     </TokenAddressContext.Provider>
   )
